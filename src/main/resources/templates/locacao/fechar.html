@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragmentos/layout}">
+<head>
+    <title>Fechar Locação e Pagar</title>
+</head>
+<body>
+    <div layout:fragment="conteudo">
+        <h2 class="mt-4">Fechar Locação e Pagar</h2>
+        <div th:if="${locacao}">
+            <p><strong>Locação ID:</strong> <span th:text="${locacao.id}"></span></p>
+            <p><strong>Entregador:</strong> <span th:text="${locacao.entregador.nome}"></span></p>
+            <p><strong>Moto:</strong> <span th:text="${locacao.moto.modelo} + ' - ' + ${locacao.moto.placa}"></span></p>
+            <p><strong>Data Início:</strong> <span th:text="${#temporals.format(locacao.dataInicio, 'dd/MM/yyyy')}"></span></p>
+            <p><strong>Data Fim:</strong> <span th:text="${locacao.dataFim != null ? #temporals.format(locacao.dataFim, 'dd/MM/yyyy') : '-'}"></span></p>
+            <p><strong>Valor Diária:</strong> <span th:text="${#numbers.formatCurrency(locacao.valorDiaria)}"></span></p>
+            <p><strong>Total a Pagar:</strong> <span th:text="${locacao.total != null ? #numbers.formatCurrency(locacao.total) : '-'}"></span></p>
+        </div>
+
+        <form th:action="@{/locacoes/{id}/fechar(id=${locacao.id})}" th:object="${pagamentoDTO}" method="post">
+            <input type="hidden" th:field="*{locacaoId}" />
+            <div class="form-group">
+                <label for="valorPago">Valor Pago:</label>
+                <input type="number" id="valorPago" th:field="*{valorPago}" class="form-control" th:classappend="${#fields.hasErrors('valorPago')} ? 'is-invalid' : ''" step="0.01" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('valorPago')}" th:errors="*{valorPago}"></div>
+            </div>
+            <div class="form-group">
+                <label for="metodo">Método de Pagamento:</label>
+                <select id="metodo" th:field="*{metodo}" class="form-control" th:classappend="${#fields.hasErrors('metodo')} ? 'is-invalid' : ''" required>
+                    <option value="">Selecione o método</option>
+                    <option th:each="metodo : ${T(com.mottu.dominio.Pagamento.Metodo).values()}" th:value="${metodo}" th:text="${metodo.displayName}"></option>
+                </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('metodo')}" th:errors="*{metodo}"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Confirmar Pagamento</button>
+            <a th:href="@{/locacoes}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

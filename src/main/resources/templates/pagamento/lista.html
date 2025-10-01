@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragmentos/layout}">
+<head>
+    <title>Lista de Pagamentos</title>
+</head>
+<body>
+    <div layout:fragment="conteudo">
+        <h2 class="mt-4">Pagamentos</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Locação (ID)</th>
+                    <th>Valor Pago</th>
+                    <th>Data Pagamento</th>
+                    <th>Método</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${itens}">
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.locacaoId}"></td>
+                    <td th:text="${#numbers.formatCurrency(item.valorPago)}"></td>
+                    <td th:text="${#temporals.format(item.dataPagamento, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${item.metodo}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

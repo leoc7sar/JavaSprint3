@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragmentos/layout}">
+<head>
+    <title>Lista de Motos</title>
+</head>
+<body>
+    <div layout:fragment="conteudo">
+        <h2 class="mt-4">Motos</h2>
+        <a th:href="@{/admin/motos/nova}" class="btn btn-primary mb-3">Nova Moto</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Placa</th>
+                    <th>Modelo</th>
+                    <th>Ano</th>
+                    <th>Valor Diária</th>
+                    <th>Disponível</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${itens}">
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.placa}"></td>
+                    <td th:text="${item.modelo}"></td>
+                    <td th:text="${item.ano}"></td>
+                    <td th:text="${#numbers.formatCurrency(item.valorDiaria)}"></td>
+                    <td>
+                        <span th:if="${item.disponivel}" class="badge badge-success">Sim</span>
+                        <span th:unless="${item.disponivel}" class="badge badge-danger">Não</span>
+                    </td>
+                    <td>
+                        <a th:href="@{\"/admin/motos/\" + ${item.id} + \"/editar\"}" class="btn btn-sm btn-info">Editar</a>
+                        <form th:action="@{\"/admin/motos/\" + ${item.id} + \"/excluir\"}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Tem certeza que deseja excluir esta moto?\')">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
