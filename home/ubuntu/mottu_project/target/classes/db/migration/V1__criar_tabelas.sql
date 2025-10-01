@@ -1,0 +1,37 @@
+CREATE TABLE entregadores (
+  id BIGSERIAL PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  cpf VARCHAR(14) NOT NULL UNIQUE,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  cnh VARCHAR(30) NOT NULL UNIQUE,
+  ativo BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE motos (
+  id BIGSERIAL PRIMARY KEY,
+  placa VARCHAR(15) NOT NULL UNIQUE,
+  modelo VARCHAR(80) NOT NULL,
+  ano INT NOT NULL,
+  valor_diaria NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+  disponivel BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE locacoes (
+  id BIGSERIAL PRIMARY KEY,
+  entregador_id BIGINT NOT NULL REFERENCES entregadores(id),
+  moto_id BIGINT NOT NULL REFERENCES motos(id),
+  data_inicio DATE NOT NULL,
+  data_fim DATE,
+  valor_diaria NUMERIC(12,2) NOT NULL,
+  total NUMERIC(12,2),
+  status VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE pagamentos (
+  id BIGSERIAL PRIMARY KEY,
+  locacao_id BIGINT NOT NULL UNIQUE REFERENCES locacoes(id),
+  valor NUMERIC(12,2) NOT NULL,
+  data_pagamento TIMESTAMP NOT NULL,
+  metodo VARCHAR(20) NOT NULL
+);
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragmentos/layout :: conteudo">
+<body>
+<h2>Abrir locação</h2>
+
+<div th:if="${mensagemErro}" class="alert alert-danger" role="alert">
+    <p th:text="${mensagemErro}"></p>
+</div>
+
+<div th:if="${#fields.hasErrors(\'locacaoDTO.*\')}" class="alert alert-danger">
+    <p>Por favor, corrija os seguintes erros:</p>
+    <ul>
+        <li th:each="err : ${#fields.errors(\'locacaoDTO.*\')}" th:text="${err}"></li>
+    </ul>
+</div>
+
+<form th:action="@{/locacoes/abrir}" method="post" th:object="${locacaoDTO}">
+  <div class="form-group">
+    <label for="entregadorId">Entregador:</label>
+    <select id="entregadorId" th:field="*{entregadorId}" class="form-control" th:classappend="${#fields.hasErrors(\'entregadorId\')} ? \'is-invalid\' : \'\'">
+      <option value="">Selecione um entregador</option>
+      <option th:each="e : ${entregadores}" th:value="${e.id}" th:text="${e.nome}"></option>
+    </select>
+    <div class="invalid-feedback" th:if="${#fields.hasErrors(\'entregadorId\')}" th:errors="*{entregadorId}"></div>
+  </div>
+  <div class="form-group">
+    <label for="motoId">Moto:</label>
+    <select id="motoId" th:field="*{motoId}" class="form-control" th:classappend="${#fields.hasErrors(\'motoId\')} ? \'is-invalid\' : \'\'">
+      <option value="">Selecione uma moto</option>
+      <option th:each="m : ${motos}" th:value="${m.id}" th:text="${m.placa} + \' - \' + ${m.modelo} + (${m.disponivel} ? \' (Disponível)\' : \' (Indisponível)\')"></option>
+    </select>
+    <div class="invalid-feedback" th:if="${#fields.hasErrors(\'motoId\')}" th:errors="*{motoId}"></div>
+  </div>
+  <div class="form-group">
+    <label for="dataInicio">Data de Início:</label>
+    <input type="date" id="dataInicio" th:field="*{dataInicio}" class="form-control" th:classappend="${#fields.hasErrors(\'dataInicio\')} ? \'is-invalid\' : \'\'">
+    <div class="invalid-feedback" th:if="${#fields.hasErrors(\'dataInicio\')}" th:errors="*{dataInicio}"></div>
+  </div>
+  <!-- O valor da diária não será mais enviado pelo formulário, mas sim obtido da moto selecionada no backend -->
+  <button type="submit" class="btn btn-primary">Abrir</button>
+</form>
+</body>
+</html>
+

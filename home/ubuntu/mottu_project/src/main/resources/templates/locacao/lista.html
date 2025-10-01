@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragmentos/layout :: conteudo">
+<body>
+<h2>Locações</h2>
+<a th:href="@{/locacoes/abrir}" class="btn btn-primary mb-3">Abrir nova locação</a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Entregador (ID)</th>
+      <th>Moto (ID)</th>
+      <th>Início</th>
+      <th>Fim</th>
+      <th>Valor Diária</th>
+      <th>Total</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="item : ${itens}">
+      <td th:text="${item.id}"></td>
+      <td th:text="${item.entregadorId}"></td>
+      <td th:text="${item.motoId}"></td>
+      <td th:text="${#temporals.format(item.dataInicio, 'dd/MM/yyyy')}"></td>
+      <td th:text="${item.dataFim != null ? #temporals.format(item.dataFim, 'dd/MM/yyyy') : '-'}"></td>
+      <td th:text="${#numbers.formatCurrency(item.valorDiaria)}"></td>
+      <td th:text="${item.valorTotal != null ? #numbers.formatCurrency(item.valorTotal) : '-'}"></td>
+      <td th:text="${item.status}"></td>
+      <td>
+        <a th:if="${item.status == 'ABERTA'}" th:href="@{\'/locacoes/\' + ${item.id} + \'/fechar\'}" class="btn btn-sm btn-warning">Fechar & Pagar</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

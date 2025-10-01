@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragmentos/layout :: conteudo">
+<body>
+<h2>Fechar locação</h2>
+
+<div th:if="${mensagemErro}" class="alert alert-danger" role="alert">
+    <p th:text="${mensagemErro}"></p>
+</div>
+
+<div th:if="${#fields.hasErrors(\'pagamentoDTO.*\')}" class="alert alert-danger">
+    <p>Por favor, corrija os seguintes erros:</p>
+    <ul>
+        <li th:each="err : ${#fields.errors(\'pagamentoDTO.*\')}" th:text="${err}"></li>
+    </ul>
+</div>
+
+<form th:action="@{\'/locacoes/\'+ ${locacaoDTO.id} + \'/fechar\'}" method="post" th:object="${pagamentoDTO}">
+  <p>Locação #<span th:text="${locacaoDTO.id}"></span> — <b th:text="${locacaoDTO.entregadorId}"></b> / <b th:text="${locacaoDTO.motoId}"></b></p>
+  <div class="form-group">
+    <label for="dataPagamento">Data de Pagamento:</label>
+    <input type="date" id="dataPagamento" th:field="*{dataPagamento}" class="form-control" th:classappend="${#fields.hasErrors(\'dataPagamento\')} ? \'is-invalid\' : \'\'">
+    <div class="invalid-feedback" th:if="${#fields.hasErrors(\'dataPagamento\')}" th:errors="*{dataPagamento}"></div>
+  </div>
+  <div class="form-group">
+    <label for="metodo">Método de pagamento:</label>
+    <select id="metodo" th:field="*{metodo}" class="form-control" th:classappend="${#fields.hasErrors(\'metodo\')} ? \'is-invalid\' : \'\'">
+      <option value="">Selecione um método</option>
+      <option th:each="metodo : ${metodosPagamento}" th:value="${metodo}" th:text="${metodo.name()}"></option>
+    </select>
+    <div class="invalid-feedback" th:if="${#fields.hasErrors(\'metodo\')}" th:errors="*{metodo}"></div>
+  </div>
+  <button type="submit" class="btn btn-primary">Fechar & Pagar</button>
+</form>
+</body>
+</html>
+

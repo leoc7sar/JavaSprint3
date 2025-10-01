@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragmentos/layout :: conteudo">
+<body>
+<h2>Entregadores</h2>
+<a th:href="@{/admin/entregadores/novo}" class="btn btn-primary mb-3">Novo Entregador</a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>CPF</th>
+      <th>E-mail</th>
+      <th>CNH</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="item : ${itens}">
+      <td th:text="${item.id}"></td>
+      <td th:text="${item.nome}"></td>
+      <td th:text="${item.cpf}"></td>
+      <td th:text="${item.email}"></td>
+      <td th:text="${item.cnh}"></td>
+      <td>
+        <a th:href="@{\'/admin/entregadores/\' + ${item.id} + \'/editar\'}" class="btn btn-sm btn-info">Editar</a>
+        <form th:action="@{\'/admin/entregadores/\' + ${item.id} + \'/excluir\'}" method="post" style="display:inline;">
+          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Tem certeza que deseja excluir este entregador?\')">Excluir</button>
+        </form>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
